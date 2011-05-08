@@ -36,7 +36,7 @@ VCARD_FIELDS = {
 'ru::vCard/TITLE'       : u'Должность',
 'ru::vCard/ADR/CTRY'    : u'Государство',
 'ru::vCard/EMAIL'       : u'Мыло',
-'en::vCard/EMAIL/USERID': u'Мыло',
+'ru::vCard/EMAIL/USERID': u'Мыло',
 'ru::vCard/UID'         : u'UID',
 'ru::vCard/JABBERID'    : u'JID',
 'ru::vCard/ROLE'        : u'Роль',
