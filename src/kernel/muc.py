@@ -49,7 +49,6 @@ class muc:
   b = b.strip()
   self.bot.log.log(escape(u'attempt to send message to %s (type "%s", body: %s)' % (s, t, b)), 3)
   if (s in self.bot.g.keys()) or (t <> 'groupchat'):
-   if b == '': b = '[empty message]'
    self.bot.wrapper.msg(t, s, b)
   else:
    s = s.split('/')

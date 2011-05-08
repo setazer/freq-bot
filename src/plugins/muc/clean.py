@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 #~#######################################################################
 #~ Copyright (c) 2008 Burdakov Daniel <kreved@kreved.org>               #
+#~ Copyright (c) 2011 Timur "TLemur" Timirkhanov                        #
 #~                                                                      #
 #~ This file is part of FreQ-bot.                                       #
 #~                                                                      #
@@ -20,7 +21,7 @@
 #~#######################################################################
 def clean_handler(t, s, p):
  for i in range(18):
-  bot.muc.msg('groupchat', s.room.jid, '.')
+  bot.muc.msg('groupchat', s.room.jid, '')
   time.sleep(1.7)
  s.lmsg('groupchat', 'cleaned')
 
