@@ -1,0 +1,3 @@
+muc admin
+.invite jid, при желании можно указать причину - .invite jid|причина
+
