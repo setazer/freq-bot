@@ -215,6 +215,7 @@ class muc:
   p.addElement('status').addContent(options.get_option(groupchat.jid, 'status', \
   config.STATUS).replace('%VERSION%', self.bot.version_version))
   p.addElement('x', 'http://jabber.org/protocol/muc').addElement('history').__setitem__('maxchars', '0')
+  p.addElement('show').addContent(options.get_option(groupchat.jid, 'show', config.SHOW))
   self.bot.wrapper.send(p)
   q = self.load_groupchats()
   if not (groupchat.jid in q): self.dump_groupchats(q+[groupchat.jid])
