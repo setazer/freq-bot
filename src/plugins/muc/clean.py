@@ -20,7 +20,8 @@
 #~ along with FreQ-bot.  If not, see <http://www.gnu.org/licenses/>.    #
 #~#######################################################################
 def clean_handler(t, s, p):
- for i in range(18):
+ r = int(p) if (p and p.isdigit()) else 18
+ for i in range(r):
   bot.muc.msg('groupchat', s.room.jid, '')
   time.sleep(1.7)
  s.lmsg('groupchat', 'cleaned')
