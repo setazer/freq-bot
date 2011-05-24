@@ -38,3 +38,4 @@ CHATLOGS_DIR = '/var/freqbot/chatlogs'
 CHATLOGS_ENABLE = 'off'
 CHATLOGS_ALLOW_SWICH = True
 #if CHATLOGS_ALLOW_SWICH, then room owner can enable/disable logging
+LASTFM = 'Place your last.fm API key here'
