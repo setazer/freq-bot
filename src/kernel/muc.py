@@ -108,8 +108,12 @@ class muc:
      _item = [i for i in _x.children if i.name=='item'][0]
      item.affiliation = _item['affiliation']
      item.role = _item['role']
-     try: item.realjid = _item['jid'].split('/')[0]
-     except: item.realjid = item.jid
+     try:
+      item.realjid = _item['jid'].split('/')[0]
+      item.fulljid = _item['jid']
+     except:
+      item.realjid = item.jid
+      item.fulljid = item.jid
     except:
      self.bot.log.err(u"Got invalid presence from '%s'?\n%s: %s<br/><font color=grey>%s</font>" % (x['from'], escape(repr(sys.exc_info()[0])), escape(repr(sys.exc_info()[1])), escape(x.toXml())))
     if not item.handled:

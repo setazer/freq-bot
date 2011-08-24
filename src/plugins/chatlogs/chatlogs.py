@@ -67,6 +67,10 @@ def write_to_log_(groupchat, text, with_timestamp=True, with_br=True):
   prev = time.strftime('../../%Y/%m/%d.html', time.localtime(time.time()-86400))
   next = time.strftime('../../%Y/%m/%d.html', time.localtime(time.time()+86400))
   header = header.replace('$next', next).replace('$prev', prev)
+  for i in bot.g[groupchat].keys():
+   item = bot.g[groupchat][i]
+   list += u'%s &lt;%s&gt; %s, %s (%s [%s])/n' % (i, item.fulljid, lang.get(item.affiliation, lang.getLang(item.jid)), lang.get(item.role, lang.getLang(item.jid)), escape(item.status), item.show)
+  header = header.replace('$list', list)
   fp.write(header.encode('utf8', 'replace'))
   fp.close()
  if with_timestamp: tm = time.strftime(u'<a name="%H:%M:%S" href="#%H:%M:%S" class="ts">[%H:%M:%S]</a>')
@@ -90,7 +94,7 @@ def log_regex_url(matchobj):
 def replace_links(text):
  return re.sub(u'(http|ftp)(\:\/\/[^\s<]+)', log_regex_url, text)
 
-def chatlogs_msg_handler(source, body):
+def chatlogs_msg_handler(source, body, delayed):
  if not body: return
  else: body = body.strip()
  j = jid.JID(source)
@@ -99,9 +103,9 @@ def chatlogs_msg_handler(source, body):
  if not nick: nick = room
  if (room in bot.g.keys()) and (bot.g[room].get_option('chatlogs', config.CHATLOGS_ENABLE)=='on'):
   if body.startswith(u'/me ') and (len(body)>4):
-   m = u'<font class="mne">* %s %s</font>' % (escape(nick), replace_links(escape(body[4:]).replace('\n', '<br/>')))
+   m = u'<span class="mne">* %s %s</span>' % (escape(nick), replace_links(escape(body[4:]).replace('\n', '<br/>')))
   else:
-   m = u'<font class="mn">&lt;%s&gt;</font> %s' % (escape(nick), replace_links(escape(body).replace('\n', '<br/>')))
+   m = u'<span class="mn">&lt;%s&gt;</span> %s' % (escape(nick), replace_links(escape(body).replace('\n', '<br/>')))
   write_to_log(room, m)
 
 def chatlogs_topic_handler(source, subject, immediately=False):
@@ -118,10 +122,10 @@ def chatlogs_topic_handler(source, subject, immediately=False):
    #print [nick]
    m = lang.msg('chatlog_change_subject', (escape(nick), replace_links(escape(subject).replace('\n', '<br/>'))), lang.getLang(source))
    #print [m]
-   m = u'<font class="roomcsubject">' + m + u'</font>'
+   m = u'<span class="roomcsubject">' + m + u'</span>'
    #print [m]
   else:
-   m = lang.msg('chatlog_subject', (replace_links(escape(subject).replace('\n', '<br/>')), ), lang.getLang(source))
+   m = replace_links(escape(subject).replace('\n', '<br/>')) 
    m = u'<div class="roomsubject">' + m + u'</div>'
   #print 'let\'s write_to_log'
   #print (room, m, nick <> None)
@@ -131,7 +135,8 @@ def chatlogs_topic_handler(source, subject, immediately=False):
 
 def chatlogs_join_handler(item):
  if item.room and (item.room.get_option('chatlogs', config.CHATLOGS_ENABLE)=='on'):
-  m = u'<font class="mj">%s %s</font>' % (escape(item.nick), lang.get('chatlog_joined', lang.getLang(item.jid)))
+  _nick = escape(item.nick)
+  m = u'<span class="mj">%s &lt;%s&gt; %s %s, %s (%s [%s])</span>' % (_nick, item.fulljid, lang.get('chatlog_joined', lang.getLang(item.jid)), lang.get(item.affiliation, lang.getLang(item.jid)), lang.get(item.role, lang.getLang(item.jid)), escape(item.status), item.show)
   write_to_log(item.room.jid, m)
 
 def chatlogs_leave_handler(item, typ, reason):
@@ -153,7 +158,7 @@ def chatlogs_leave_handler(item, typ, reason):
    m = lang.msg('chatlog_changed_nick', (escape(item.nick), ), lang.getLang(item.jid))
   if typ == 3: nick = reason
   else: nick = item.nick
-  m = u'<font class="ml">%s %s</font>' % (escape(nick), m)
+  m = u'<span class="ml">%s %s</span>' % (escape(nick), m)
   write_to_log(item.room.jid, m)
 
 if config.CHATLOGS_ALLOW_SWICH: log_access = 11

@@ -28,6 +28,7 @@ class item:
   self.handled = None
   self.room = room
   self.jid = None
+  self.fulljid = None
   self.realjid = None
   self.nick = None
   self.role = None

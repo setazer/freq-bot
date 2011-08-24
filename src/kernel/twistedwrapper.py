@@ -258,7 +258,7 @@ class wrapper:
   self.msghandlers.append(func)
 
  def cbmessage(self, x):
-  delayed = [i for i in x.children if (i.__class__==domish.Element) and ((i.name=='delay') or ((i.name=='x') and (i.uri=='jabber:x:delay')))]
+  delayed = False
   try: body = self.getChild(x, 'body').children[0]
   except: body = ''
   try: subject = self.getChild(x, 'subject').children[0]

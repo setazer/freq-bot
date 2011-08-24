@@ -197,6 +197,8 @@ class freqbot:
  def call_cmd_handlers(self, t, s, body, subject, stanza):
   if t == 'error': return
   if subject: return
+  delayed = [i for i in stanza.children if (i.__class__==domish.Element) and ((i.name=='delay') or ((i.name=='x') and (i.uri=='jabber:x:delay')))]
+  if delayed: return
   #found or create item
   groupchat = s.split('/')[0]
   nick = s[len(groupchat)+1:]
@@ -204,6 +206,7 @@ class freqbot:
   except:
    item = new_item(self)
    item.jid = s
+   item.fulljid = s
    item.realjid = JID(s).userhost()
   if item.room and (item.nick == self.muc.get_nick(item.room.jid)):
    self.log.log(u'own message from %s ignored' % (escape(item.jid), ), 2)
@@ -262,10 +265,15 @@ class freqbot:
     self.log.log('ignored subject from %s, stanza was %s' % (escape(s), escape(stanza.toXml())), 3)
    else:
     self.log.log('got subject from %s, stanza was %s, let\'s call topichandlers' % (escape(s), escape(stanza.toXml())), 1)
-    for i in self.topichandlers: self.call(i, s, subject)
+    if j.resource:
+     for i in self.topichandlers: self.call(i, s, subject)
+    else:
+     for i in self.topichandlers: self.call(i, s, b)
   else:
+   delayed = [i for i in stanza.children if (i.__class__==domish.Element) and ((i.name=='delay') or ((i.name=='x') and (i.uri=='jabber:x:delay')))]
+   if delayed: dl = True
    for i in self.msghandlers:
-    if (t == 'groupchat') or not i[1]: self.call(i[0], s, b)
+    if (t == 'groupchat') or not i[1]: self.call(i[0], s, b, dl)
 
  def call_bad_handlers(self, s, text, badword):
   for i in self.badhandlers: self.call(i, s, text, badword)
