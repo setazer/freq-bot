@@ -1,0 +1,11 @@
+mod
+импортированно с бота isida
+портер: quality
+показывает случайную цитату c ostrie.moskva.com
+
+синтаксис:
+ .ostrie 
+ 
+например:
+ .ostrie
+

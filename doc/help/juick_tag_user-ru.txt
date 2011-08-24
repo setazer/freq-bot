@@ -1,0 +1,10 @@
+mod
+импортированно с бота isida
+портер: quality
+миниблоги juick.com, показывает пользователей, использующие теги
+
+синтаксис:
+ .juick_tag_user [tag] [count_user]
+ 
+например:
+ .juick_tag_user linux

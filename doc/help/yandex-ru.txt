@@ -1,0 +1,11 @@
+mod
+импортированно с бота talisman
+портер: quality
+инструмент для поиска в Yandex
+
+синтаксис: 
+ .yandex [text]
+
+например:
+ .yandex jabber
+

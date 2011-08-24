@@ -1,0 +1,11 @@
+all mod
+импортированно с бота isida
+портер: quality
+инструмент для поиска в Wikipedia
+
+синтаксис: 
+ .wikipedia [text]
+
+например:
+ .wikipedia jabber
+

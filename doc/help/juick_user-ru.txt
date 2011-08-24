@@ -1,0 +1,10 @@
+mod
+импортированно с бота isida
+портер: quality
+миниблоги juick.com, последние сообщения указанного пользователя
+
+синтаксис:
+ .juick_user [user] [count]
+ 
+например:
+ .juick_user quality

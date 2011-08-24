@@ -1,0 +1,9 @@
+mod all
+просмотр рейтинга своей конференции с ресурса jc.jabber.ru
+автор: quality
+
+синтаксис:
+ .jc [nameconf]
+ 
+пример:
+ .jc botaq

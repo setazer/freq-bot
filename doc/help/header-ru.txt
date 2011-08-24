@@ -1,0 +1,10 @@
+mod all
+импортированно с бота isida
+портер: quality
+показывает заголовок файла
+
+синтаксис:
+ .header [url]
+ 
+например:
+ .header http://bm2.googlecode.com/files/BombusMod531.jar

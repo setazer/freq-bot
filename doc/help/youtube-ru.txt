@@ -1,0 +1,9 @@
+mod
+импортированно с бота isida
+портер: quality
+поиск по YouTube
+синтаксис:
+ .youtube [text]
+ 
+например:
+ .youtube аниме

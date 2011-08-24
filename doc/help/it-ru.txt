@@ -1,0 +1,10 @@
+mod
+импортированно с бота talsiman
+портер: quality
+показывает случайную цитату ithappens (http://ithappens.ru)
+
+синтаксис:
+ .it
+ 
+например:
+ .it

@@ -1,0 +1,10 @@
+mod
+импортированно с бота talisman
+портер: quality
+cонник с ресурса sonnik.ru
+
+синтаксис:
+ .sonnik [text]
+ 
+например:
+ .sonnik секс
