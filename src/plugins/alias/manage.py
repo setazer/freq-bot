@@ -19,6 +19,7 @@
 #~ along with FreQ-bot.  If not, see <http://www.gnu.org/licenses/>.    #
 #~#######################################################################
 def parse_alias(text):
+ if text == u'&': return (2, None, None, text, False)
  if text.startswith(u'access:'):
   q = re.match(u'^access:(\d{1,3}):(\d{1,3})@(.*[^&])(&?)$', text)
   if q:
