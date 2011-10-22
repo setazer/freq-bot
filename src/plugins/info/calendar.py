@@ -22,7 +22,7 @@ import calendar
 def calendar_handler(t, s, p):
  cal = calendar.TextCalendar()
  tmp = cal.formatmonth(2011, 10, 3)
- tmp.replace(' ', '_')
+ tmp = tmp.replace(' ', '_')
  s.msg(t, tmp)
 
 bot.register_cmd_handler(calendar_handler, u'.calendar')
