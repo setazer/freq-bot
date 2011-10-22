@@ -199,13 +199,27 @@ bot.register_cmd_handler(sonnik, u'.sonnik')
 
 
 def anek(t, s, p):
- text = urllib.urlopen('http://www.anekdot.ru/scripts/rand_anekdot.php?').read()
- text = text[re.search('<pre>', text).end():]
- text = text[:re.search('</pre>', text).start()]
- s.msg(t, unicode(text, 'windows-1251'))
-
+ try:
+  text = urllib.urlopen('http://www.anekdot.ru/scripts/rand_anekdot.php?').read()
+  text = re.findall('<div class="text">(.*)</div>', text)[0]
+  text = text.replace("<br />", "   ")
+  s.msg(t, unicode(text, 'windows-1251'))
+ except:
+  s.msg(t, u'что-то сломалось')
  
 bot.register_cmd_handler(anek, u'.anek')
+
+
+def afor2(t, s, p):
+ p = p.strip()
+ if p not in ['ru', 'en']: p = 'ru'
+ try:
+  text = urllib.urlopen('http://api.forismatic.com/api/1.0/?method=getQuote&format=text&lang=' + p).read()
+  s.msg(t, unicode(text,'utf-8'))
+ except:
+  s.msg(t, u'что-то сломалось')
+ 
+bot.register_cmd_handler(afor2, u'.forismatic')
 
 
 def afor(t, s, p):
@@ -234,11 +248,13 @@ def bash_org_ru(t, s, text):
 	if body.count('<div class="vote">') > 1 and url.count('quote'): msg = u'цитата не найдена!'
 	else:
 		body = body.split('<div class="vote">')[1].split(splitter)[0]
-		msg = u'http://bash.org.ru/quote/'+str(get_tag(body, 'a'))+u' '+rss_del_nn(rss_replace(body[body.find('[:||||:]'):].replace('</div>', '\n').replace('<div>', '').replace('[:||||:]', '::: ').replace('</a>\n', '')))
+		msg = rss_del_nn(rss_replace(body[body.find('[:||||:]'):].replace('</div>', '\n').replace('<div>', '').replace('[:||||:]', '').replace('</a>\n', '')))
+        msg = re.sub('</a> /\n<a href=".*</a> /\n.*\n', '', msg)
 	s.msg(t, msg)
 
 	
 bot.register_cmd_handler(bash_org_ru, u'.bash')
+
 
 	
 def ibash_org_ru(t, s, text):
