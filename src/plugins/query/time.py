@@ -65,7 +65,7 @@ def time_result_handler(t, s, p, x):
     local_time = utc_time
   s.msg(t, datetime.strftime(local_time, '%A %d.%m.%Y %H:%M:%S')+tzo)
  except:
-  s.msg(t, 'No response')
+  old_time_result_handler(t, s, p, x)
 
 bot.register_cmd_handler(time_handler, '.time')
 bot.register_cmd_handler(old_time_handler, '.time_old')

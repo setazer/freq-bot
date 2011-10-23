@@ -272,6 +272,7 @@ class freqbot:
   else:
    delayed = [i for i in stanza.children if (i.__class__==domish.Element) and ((i.name=='delay') or ((i.name=='x') and (i.uri=='jabber:x:delay')))]
    if delayed: dl = True
+   else: dl = False
    for i in self.msghandlers:
     if (t == 'groupchat') or not i[1]: self.call(i[0], s, b, dl)
 
