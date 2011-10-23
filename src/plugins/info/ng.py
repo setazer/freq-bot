@@ -23,7 +23,7 @@ def ng_handler(t, s, p):
  present = datetime.now()
  newyear = datetime(present.year+1, 1, 1,0,0,0)
  diff = newyear - present
- stime = u'Скоро новый год! До него осталось %d секунд' % (diff.seconds,)
+ stime = u'Скоро новый год! До него осталось %d секунд...' % (diff.days*86400+diff.seconds,)
  s.msg(t, stime)
 
 bot.register_cmd_handler(ng_handler, u'.ng')
