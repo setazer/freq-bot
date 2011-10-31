@@ -108,6 +108,7 @@ def item_x(i, access):
  #print i
  #print access
  r.jid = i.jid
+ r.fulljid = i.fulljid
  r.realjid = i.realjid
  r.nick = i.nick
  r.role = i.role

@@ -35,6 +35,8 @@ LOG_FILES = {}
 TOPICS = {}
 log_header = read_file('templates/chatlog_header.html')
 log_footer = read_file('templates/chatlog_footer.html')
+next = ''
+prev = ''
 
 def check_dir(s):
  if not os.access(s, os.F_OK): os.mkdir(s)
@@ -45,6 +47,8 @@ def write_to_log(groupchat, text, with_timestamp=True, with_br=True):
  else: write_to_log_(groupchat, text, with_timestamp, with_br)
 
 def write_to_log_(groupchat, text, with_timestamp=True, with_br=True):
+ global next
+ global prev
  p1 = '%s/%s' % (config.CHATLOGS_DIR, groupchat.encode('utf8', 'replace'))
  p2 = '%s/%s' % (p1, time.strftime('%Y'))
  p3 = '%s/%s' % (p2, time.strftime('%m'))
@@ -67,9 +71,10 @@ def write_to_log_(groupchat, text, with_timestamp=True, with_br=True):
   prev = time.strftime('../../%Y/%m/%d.html', time.localtime(time.time()-86400))
   next = time.strftime('../../%Y/%m/%d.html', time.localtime(time.time()+86400))
   header = header.replace('$next', next).replace('$prev', prev)
-  for i in bot.g[groupchat].keys():
-   item = bot.g[groupchat][i]
-   list += u'%s &lt;%s&gt; %s, %s (%s [%s])/n' % (i, item.fulljid, lang.get(item.affiliation, lang.getLang(item.jid)), lang.get(item.role, lang.getLang(item.jid)), escape(item.status), item.show)
+  list = groupchat
+  for item in bot.g[groupchat].items.keys():
+   _i = bot.g[groupchat].items[item]
+   list = u'%s &lt;%s&gt; %s, %s (%s [%s])/n' % (escape(_i.nick), _i.fulljid, lang.get(_i.affiliation, lang.getLang(groupchat)), lang.get(_i.role, lang.getLang(groupchat)), escape(_i.status), _i.show)
   header = header.replace('$list', list)
   fp.write(header.encode('utf8', 'replace'))
   fp.close()
@@ -82,9 +87,12 @@ def write_to_log_(groupchat, text, with_timestamp=True, with_br=True):
  fp.close()
 
 def close_log(fn):
+ global next
+ global prev
  if os.access(fn, os.W_OK):
+  footer = log_footer.replace('$next', next).replace('$prev', prev)
   fp = file(fn, 'a')
-  fp.write(log_footer.encode('utf8', 'replace'))
+  fp.write(footer.encode('utf8', 'replace'))
   fp.close()
 
 def log_regex_url(matchobj):
