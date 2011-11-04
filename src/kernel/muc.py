@@ -125,7 +125,7 @@ class muc:
        self.bot.log.log(u'reporting to %s about successful joining..' % (gj[0].jid, ), 6)
        groupchat.joiner = None
      item.handled = True
-     self.bot.call_join_handlers(item)
+    self.bot.call_join_handlers(item)
     if not(item.nick == self.get_nick(groupchat.jid)): #if item isn't bot...
      self.bot.check_text(item, item.nick)
      self.bot.check_text(item, item.status)
