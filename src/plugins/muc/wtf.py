@@ -33,12 +33,12 @@ def dfn_handler(t, s, p):
     val = kv[1].strip()
     if not val:
      try:
-      wtf_db.query('delete from wtf where room=? and key=?',(s.room.jid,key))
+      wtf_db.query('delete from wtf where room="?" and key="?"',(s.room.jid,key))
       wtf_db.commit()
       s.lmsg(t,'dfn_remove')
      except: s.lmsg(t,'dfn_failed')
     else:
-     wtf_db.query('delete from wtf where room=? and key=?',(s.room.jid,key))
+     wtf_db.query('delete from wtf where room="?" and key="?"',(s.room.jid,key))
      wtf_db.query('insert into wtf values (?,?,?)',(s.room.jid,key,val+"\n(by %s %s)" % (s.nick,time.strftime("%d.%m.%Y %H:%M:%S"))))
      wtf_db.commit()
      s.lmsg(t,'dfn_save')
@@ -50,14 +50,13 @@ def wtf_handler(t,s,p):
  if not p: s.lmsg(t,'wtf_empty'); return
  wtf_db = db.database('wtf')
  try:
-  res = wtf_db.query('select val from wtf where room=? and key=?',(s.room.jid,params)).fetchone()
+  res = wtf_db.query('select val from wtf where room="?" and key="?"',(s.room.jid,params)).fetchone()
   s.lmsg(t,'wtf_result',p,''.join(res))
-  cn.close()
- except: s.lmsg(t,'wtf_not_found'); cn.close()
- 
+ except: s.lmsg(t,'wtf_not_found')
+
 def wtfnames_handler(t,s,params):
  wtf_db = db.database('wtf')
- keys = wtf_db.query('select * from wtf where room=?',(s.room.jid,))
+ keys = wtf_db.query('select * from wtf where room="?"',(s.room.jid,))
  res = []
  try:
   for i in keys:
@@ -71,7 +70,7 @@ def wtfsearch_handler(t,s,params):
  wtf_db = db.database('wtf')
  params = '%'+params+'%'
  try:
-  res = wtf_db.query('select * from wtf where (room=?) and (key like ? or val like ?)',(s.room.jid,params,params))
+  res = wtf_db.query('select * from wtf where (room="?") and (key like "?" or val like "?")',(s.room.jid,params,params))
   out = []
   for i in res:
    out.append(i[1])
