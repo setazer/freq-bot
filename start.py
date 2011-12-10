@@ -75,7 +75,6 @@ fp.close()
 from freq import freqbot
 import lang
 import options
-import db
 from options import optstringlist
 
 bot = freqbot(globals())

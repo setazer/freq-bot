@@ -3,6 +3,7 @@
 #~#######################################################################
 #~ Copyright (c) 2008 Burdakov Daniel <kreved@kreved.org>               #
 #~ Copyright (c) 2010 Kazakov Alexandr <ferym@jabber.ru>                #
+#~ Copyright (c) 2011 Timur Timirkkhanov <tlemur@jabber.ru>             #
 #~                                                                      #
 #~ This file is part of FreQ-bot.                                       #
 #~                                                                      #
@@ -20,74 +21,63 @@
 #~ along with FreQ-bot.  If not, see <http://www.gnu.org/licenses/>.    #
 #~#######################################################################
 
-import sqlite3
-from random import randint
-import string
+import db
 
-wtfbase = config.DBDIR+'/wtf.db'
-
-def dfn_handler(t, s, params):
-  if params:
-   cn = sqlite3.connect(wtfbase)
-   cr = cn.cursor()
-   kv = string.split(params, '=', 1)
+def dfn_handler(t, s, p):
+  p = p.strip()
+  if p:
+   wtf_db = db.database('wtf')
+   kv = p.split('=', 1)
    if not len(kv)<2:
-    key = string.lower(kv[0]).strip()
+    key = kv[0].lower().strip()
     val = kv[1].strip()
     if not val:
      try:
-      cr.execute('delete from wtf where room=? and key=?',(s.room.jid,key))
-      cn.commit()
-      cn.close()
+      wtf_db.query('delete from wtf where room=? and key=?',(s.room.jid,key))
+      wtf_db.commit()
       s.lmsg(t,'dfn_remove')
      except: s.lmsg(t,'dfn_failed')
     else:
-     cr.execute('delete from wtf where room=? and key=?',(s.room.jid,key))
-     cr.execute('insert into wtf values (?,?,?)',(s.room.jid,key,val+"\n(by %s %s)" % (s.nick,time.strftime("%d.%m.%Y %H:%M:%S"))))
-     cn.commit()
-     cn.close()
+     wtf_db.query('delete from wtf where room=? and key=?',(s.room.jid,key))
+     wtf_db.query('insert into wtf values (?,?,?)',(s.room.jid,key,val+"\n(by %s %s)" % (s.nick,time.strftime("%d.%m.%Y %H:%M:%S"))))
+     wtf_db.commit()
      s.lmsg(t,'dfn_save')
    else: s.lmsg(t,'dfn_empty')
   else: s.lmsg(t,'dfn_empty')
 
-def wtf_handler(t,s,params):
- if not params: s.lmsg(t,'wtf_empty'); return
- cn = sqlite3.connect(wtfbase)
- cr = cn.cursor()
+def wtf_handler(t,s,p):
+ p=p.strip()
+ if not p: s.lmsg(t,'wtf_empty'); return
+ wtf_db = db.database('wtf')
  try:
-  res = cr.execute('select val from wtf where room=? and key=?',(s.room.jid,params)).fetchone()
-  s.lmsg(t,'wtf_result',params,''.join(res))
+  res = wtf_db.query('select val from wtf where room=? and key=?',(s.room.jid,params)).fetchone()
+  s.lmsg(t,'wtf_result',p,''.join(res))
   cn.close()
  except: s.lmsg(t,'wtf_not_found'); cn.close()
  
 def wtfnames_handler(t,s,params):
- cn = sqlite3.connect(wtfbase)
- cr = cn.cursor()
- keys = cr.execute('select * from wtf where room=?',(s.room.jid,))
+ wtf_db = db.database('wtf')
+ keys = wtf_db.query('select * from wtf where room=?',(s.room.jid,))
  res = []
  try:
   for i in keys:
    res.append(i[1])
   if len(res)==0: s.lmsg(t,'wtfnames_empty'); return
   s.lmsg(t,'wtfnames_result',', '.join(res),str(len(res)))
-  cn.close()
- except: s.lmsg(t,'failed'); cn.close()
+ except: s.lmsg(t,'failed')
  
 def wtfsearch_handler(t,s,params):
  if not params: s.lmsg(t,'wtfsearch_not_parameters'); return
- cn = sqlite3.connect(wtfbase)
- cr = cn.cursor()
+ wtf_db = db.database('wtf')
  params = '%'+params+'%'
  try:
-  res = cr.execute('select * from wtf where (room=?) and (key like ? or val like ?)',(s.room.jid,params,params))
+  res = wtf_db.query('select * from wtf where (room=?) and (key like ? or val like ?)',(s.room.jid,params,params))
   out = []
   for i in res:
    out.append(i[1])
   if len(out)<1: s.lmsg(t,'wtfsearch_error'); return
   s.lmsg(t,'wtfsearch_result',', '.join(out))
-  cn.close()
- except: s.lmsg(t,'wtfsearch_error'); cn.close()
-
+ except: s.lmsg(t,'wtfsearch_error')
 
 bot.register_cmd_handler(dfn_handler, '.dfn', 9)
 bot.register_cmd_handler(wtf_handler, '.wtf')
