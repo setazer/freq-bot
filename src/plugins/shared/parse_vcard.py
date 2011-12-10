@@ -49,6 +49,7 @@ VCARD_FIELDS = {
 'ru::vCard/ADR/PCODE'   : u'Индекс',
 'ru::vCard/GEO/LON'     : u'Долгота',
 'ru::vCard/GEO/LAT'     : u'Широта',
+'ru::vCard/GENDER'      : u'Пол',
 
 'en::vCard/FN'          : u'Full Name',
 'en::vCard/N/SUFFIX'    : u'Suffix',
@@ -75,7 +76,8 @@ VCARD_FIELDS = {
 'en::vCard/ADR/EXTADD'  : u'Address 2',
 'en::vCard/ADR/PCODE'   : u'Post code',
 'en::vCard/GEO/LON'     : u'Longitude',
-'en::vCard/GEO/LAT'     : u'Latitude'
+'en::vCard/GEO/LAT'     : u'Latitude',
+'en::vCard/GENDER'      : u'Gender'
 }
 
 def vcard_describe(field, lang):
