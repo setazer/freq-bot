@@ -101,16 +101,17 @@ def filter_msg_action(source, text, delayed):
   j = jid.JID(source)
   r = j.userhost()
   nick = j.resource
-  room = bot.g[r]
-  msglen = int(room.get_option('filter_msglen_length', '0'))
-  if msglen > 0 and len(text) > msglen:
-   reason = u'Your message is over %d symbols' % (msglen, )
-   action = room.get_option('filter_msglen_action', config.CERBERUS_MODE)
-   if action == 'ban': room.moderate('nick', nick, 'affiliation', 'outcast', reason)
-   elif action == 'kick': room.moderate('nick', nick, 'role', 'none', reason)
-   elif action == 'visitor': room.moderate('nick', nick, 'role', 'visitor', reason)
-   elif action == 'warning': source.msg('groupchat', reason)
-   elif action <> 'ignore': bot.log.err(escape('unknown filter_reason in %s: %s' % (room.jid, action)))
+  if r in bot.g:
+   room = bot.g[r]
+   msglen = int(room.get_option('filter_msglen_length', '0'))
+   if msglen > 0 and len(text) > msglen:
+    reason = u'Your message is over %d symbols' % (msglen, )
+    action = room.get_option('filter_msglen_action', config.CERBERUS_MODE)
+    if action == 'ban': room.moderate('nick', nick, 'affiliation', 'outcast', reason)
+    elif action == 'kick': room.moderate('nick', nick, 'role', 'none', reason)
+    elif action == 'visitor': room.moderate('nick', nick, 'role', 'visitor', reason)
+    elif action == 'warning': source.msg('groupchat', reason)
+    elif action <> 'ignore': bot.log.err(escape('unknown filter_reason in %s: %s' % (room.jid, action)))
 
 bot.register_cmd_handler(filter_mode_handler, '.filter', 9, g=1)
 bot.register_join_handler(filter_join_action)
