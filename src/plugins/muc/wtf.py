@@ -26,21 +26,22 @@ import db
 def dfn_handler(t, s, p):
   p = p.strip()
   if p:
-   wtf_db = db.database('wtf')
    kv = p.split('=', 1)
    if not len(kv)<2:
-    key = kv[0].lower().strip()
+    key = kv[0].strip()
     val = kv[1].strip()
+    wtf_db = db.database('wtf')
     if not val:
      try:
-      wtf_db.query('delete from wtf where room="?" and key="?"',(s.room.jid,key))
+      wtf_db.query('delete from wtf where room=? and key=?',(s.room.jid,key))
       wtf_db.commit()
+      del wtf_db
       s.lmsg(t,'dfn_remove')
      except: s.lmsg(t,'dfn_failed')
     else:
-     wtf_db.query('delete from wtf where room="?" and key="?"',(s.room.jid,key))
-     wtf_db.query('insert into wtf values (?,?,?)',(s.room.jid,key,val+"\n(by %s %s)" % (s.nick,time.strftime("%d.%m.%Y %H:%M:%S"))))
+     wtf_db.query('INSERT OR REPLACE into wtf values (?,?,?)',(s.room.jid,key,val+"\n(by %s %s)" % (s.nick,time.strftime("%d.%m.%Y %H:%M:%S"))))
      wtf_db.commit()
+     del wtf_db
      s.lmsg(t,'dfn_save')
    else: s.lmsg(t,'dfn_empty')
   else: s.lmsg(t,'dfn_empty')
@@ -50,13 +51,15 @@ def wtf_handler(t,s,p):
  if not p: s.lmsg(t,'wtf_empty'); return
  wtf_db = db.database('wtf')
  try:
-  res = wtf_db.query('select val from wtf where room="?" and key="?"',(s.room.jid,params)).fetchone()
+  res = wtf_db.query('select val from wtf where room=? and key=?',(s.room.jid,p)).fetchone()[0]
+  del wtf_db
   s.lmsg(t,'wtf_result',p,''.join(res))
  except: s.lmsg(t,'wtf_not_found')
 
-def wtfnames_handler(t,s,params):
+def wtfnames_handler(t,s,p):
  wtf_db = db.database('wtf')
- keys = wtf_db.query('select * from wtf where room="?"',(s.room.jid,))
+ keys = wtf_db.query('select * from wtf where room=?',(s.room.jid,))
+ del wtf_db
  res = []
  try:
   for i in keys:
@@ -65,12 +68,13 @@ def wtfnames_handler(t,s,params):
   s.lmsg(t,'wtfnames_result',', '.join(res),str(len(res)))
  except: s.lmsg(t,'failed')
  
-def wtfsearch_handler(t,s,params):
- if not params: s.lmsg(t,'wtfsearch_not_parameters'); return
- wtf_db = db.database('wtf')
- params = '%'+params+'%'
+def wtfsearch_handler(t,s,p):
+ if not p: s.lmsg(t,'wtfsearch_not_parameters'); return
+ p = '%'+p+'%'
  try:
-  res = wtf_db.query('select * from wtf where (room="?") and (key like "?" or val like "?")',(s.room.jid,params,params))
+  wtf_db = db.database('wtf')
+  res = wtf_db.query('select * from wtf where (room=?) and (key like ? or val like ?)',(s.room.jid,p,p))
+  del wtf_db
   out = []
   for i in res:
    out.append(i[1])
