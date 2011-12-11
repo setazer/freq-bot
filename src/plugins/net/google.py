@@ -31,7 +31,9 @@ def google_handler(typ, source, params):
  try: page = urllib.urlopen(url)
  except: source.lmsg(typ,'google_no_results'); return
  fp = simplejson.load(page)
- if fp['responseStatus']==200 or fp['responseData']['results']: source.msg(typ,'%s:\n%s\n%s' % (html_decode(fp['responseData']['results'][0]['title']),html_decode(fp['responseData']['results'][0]['content']),fp['responseData']['results'][0]['unescapedUrl']))
+ if fp['responseStatus']==200:
+  if not fp['responseData']['results']: source.lmsg(typ,'google_no_results'); return
+  source.msg(typ,'%s:\n%s\n%s' % (html_decode(fp['responseData']['results'][0]['title']),html_decode(fp['responseData']['results'][0]['content']),fp['responseData']['results'][0]['unescapedUrl']))
  else: source.lmsg(typ,'google_no_results')
  
 
