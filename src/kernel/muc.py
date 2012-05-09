@@ -209,7 +209,7 @@ class muc:
  def set_nick(self, groupchat, nick):
   options.set_option(groupchat, 'nick', nick)
 
- def join(self, groupchat, nick=None):
+ def join(self, groupchat, nick=None, password=None):
   if nick == None: nick = self.get_nick(groupchat)
   else: self.set_nick(groupchat, nick)
   groupchat = groupchat.replace('\n', '')
@@ -219,6 +219,10 @@ class muc:
   p.addElement('status').addContent(options.get_option(groupchat.jid, 'status', \
   config.STATUS).replace('%VERSION%', self.bot.version_version))
   p.addElement('show').addContent(options.get_option(groupchat.jid, 'show', config.SHOW))
+  xElem = domish.Element(('http://jabber.org/protocol/muc', 'x'))
+  if password != None:
+   xElem.addElement('password').addContent(password)
+  p.addChild(xElem)
   self.bot.wrapper.send(p)
   q = self.load_groupchats()
   if not (groupchat.jid in q): self.dump_groupchats(q+[groupchat.jid])

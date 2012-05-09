@@ -42,6 +42,7 @@ def invite_handler(t, s, p):
    xchild=msg.addElement('x', 'http://jabber.org/protocol/muc#user')
    xchild.addChild(Invite)
    bot.wrapper.send(msg)
+   s.msg(t, u'Призван')
  else: s.syntax(t, 'kick')
 
 bot.register_cmd_handler(invite_handler, '.invite', 7, 1)

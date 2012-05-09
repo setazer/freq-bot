@@ -3,11 +3,20 @@
 #Imported from isida, talisman by quality(quality@botaq.net)
 #Official conference - botaq@conference.jabber.ru
 #Thanks to Disabler, Avinar, Als, Gigabyte, dr.Schmurge, PoisoneD, ferym
-
-import urllib2,re,urllib
+ 
+import urllib2,re,urllib, simplejson
 from re import compile as re_compile
 strip_tags = re_compile(r'<[^<>]+>')
 
+def handler_shortiki(t, s, p):
+    try:
+        data=simplejson.load(urllib.urlopen('http://shortiki.com/export/api.php?format=json&type=random&amount=1'))
+        result = data[0]['content']
+    except:
+        result = u'Ошибка'
+    s.msg(t, result)
+
+bot.register_cmd_handler(handler_shortiki, u'.shortiki')
 
 def ukrbashorg(t, s, p):
     if p.strip()=='':
@@ -27,32 +36,10 @@ def ukrbashorg(t, s, p):
     except:
         s.msg(t,unicode('кінчився інтернет, все, приїхали...','utf8'))
 		
-		
+
 bot.register_cmd_handler(ukrbashorg, u'.ukrbor') 		
-
-
-def ostrie(t, s, p):
-    if p.strip()=='':
-        req = urllib2.Request('http://ostrie.moskva.com/?do=TopToday')
-    else:
-        req = urllib2.Request('http://ostrie.moskva.com/?do=Item&id='+p.strip())
-        req.add_header = ('User-agent', 'Mozilla/5.0')
-    try:
-        r = urllib2.urlopen(req)
-        target = r.read()
-        od = re.search('<dd>',target)
-        message = target[od.end():]
-        message = message[:re.search('<div class="instr">',message).start()]
-        message = decode(message)
-        message = '\n' + message.strip()
-        s.msg(t,unicode(message,'koi8-r'))
-    except:
-        s.msg(t,unicode('Кончился интернет, всё, приехали...','utf8'))
-		
-		
-bot.register_cmd_handler(ostrie, u'.ostrie')     
-        
-		
+ 
+	
 def bashorgru_abyss(t, s, p):
     if p.strip()=='':
         req = urllib2.Request('http://bash.org.ru/abysstop')
