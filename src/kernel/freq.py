@@ -102,22 +102,14 @@ class freqbot:
   self.log.log('Joined %s groupchats' % len(groupchats, ))
 
  def keep_alive(self):
-  #self.wrapper.presence()
   ping = domish.Element(('jabber:client', 'iq'))
   ping['to'] = config.SERVER
   ping['id'] = 'keep-alive'
   ping['type'] = 'get'
-  ping.addElement('query', 'jabber:iq:version')
+  ping.addElement('ping', 'urn:xmpp:ping')
   if self.authd > 0:
    self.log.log_e(u'keep-alive: ' + ping.toXml(), 1)
    self.wrapper.send(ping)
-  # <iq
-  # type='get'
-  # from='romeo@montague.net/orchard'
-  # to='juliet@capulet.com/balcony'
-  # id='version_1'>
-  # <query xmlns='jabber:iq:version'/>
-  # </iq>
 
  def check_for_ddos(self, jid):
   q = self.cmd_cache.get(jid, 0)
@@ -315,6 +307,12 @@ class freqbot:
     query.addElement('name').addContent(self.version_name)
     query.addElement('version').addContent(self.version_version)
     query.addElement('os').addContent(self.version_os)
+    self.wrapper.send(answer)
+  elif (xmlns == 'urn:xmpp:ping') and (typ == 'get'):
+    answer = domish.Element(('jabber:client', 'iq'))
+    answer['type'] = 'result'
+    answer['id'] = x.getAttribute('id')
+    answer['to'] = x.getAttribute('from')
     self.wrapper.send(answer)
   elif (xmlns == 'urn:xmpp:time') and (typ == 'get'):
     answer = domish.Element((None, 'iq'))
