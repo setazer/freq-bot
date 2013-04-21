@@ -29,7 +29,7 @@ from twistedwrapper import wrapper
 from pluginloader import pluginloader
 from muc import muc
 import config
-import time
+import datetime
 import os
 import sys
 import lang
@@ -37,8 +37,6 @@ import log
 import traceback
 from cerberus import censor
 from twisted.words.protocols.jabber.jid import JID
-
-__id__ = "$Id: freq.py 331 2008-05-11 17:17:39Z burdakov $"
 
 class freqbot:
 
@@ -317,6 +315,18 @@ class freqbot:
     query.addElement('name').addContent(self.version_name)
     query.addElement('version').addContent(self.version_version)
     query.addElement('os').addContent(self.version_os)
+    self.wrapper.send(answer)
+  elif (xmlns == 'urn:xmpp:time') and (typ == 'get'):
+    answer = domish.Element((None, 'iq'))
+    answer['type'] = 'result'
+    answer['id'] = x.getAttribute('id')
+    answer['to'] = x.getAttribute('from')
+    query = answer.addElement('time', 'urn:xmpp:time')
+    t = datetime.datetime.utcnow()
+    tzo = t.strftime('%z')
+    if not tzo: tzo = '+0000'
+    query.addElement('tzo').addContent(tzo[:3]+':'+tzo[3:])
+    query.addElement('utc').addContent(t.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))
     self.wrapper.send(answer)
   elif (xmlns == 'jabber:iq:roster') and (typ == 'set'): pass
   elif typ == 'error': pass
