@@ -199,8 +199,9 @@ class ClientFactory(xmlstream.XmlStreamFactory):
 
 class wrapper:
 
- def __init__(self, version):
+ def __init__(self, version, caps):
   self.version = version
+  self.caps = caps
   self.stopped = False
   self.tc = 0
   self.th = {}
@@ -233,6 +234,11 @@ class wrapper:
   if not self.x: return
   if not status: status = config.STATUS.replace(r'%VERSION%', self.version)
   p = domish.Element(('jabber:client', 'presence'))
+  cElem = domish.Element(('http://jabber.org/protocol/caps', 'c'))
+  cElem['hash'] = 'sha-1'
+  cElem['ver'] = self.caps
+  cElem['node'] = 'http://www.freq-bot.net/'
+  p.addChild(cElem)
   p.addElement('status').addContent(status)
   p.addElement('show').addContent('chat')
   self.x.send(p)

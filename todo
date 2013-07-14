@@ -12,9 +12,7 @@
 ? сенсоры - http://kreved.org/wiki/index.php/Sensors
 - RSS reader
 ? bug: если в doc/help есть файлы с русскими именами, то не собирается html
-? caps (xep-0115)
 - .dfn, .wtf, .wtfall, .wtfpriv, .wtfcount, .wtfsearch, .wtfrand, ппц..
-? отвечать на discovery, xep-не-помню-какой
 - возможность по .realjid посмотреть jid тех, кто только что вышел
 - обновить все .msg файлы (кроме ru)
 - обработка сигналов

@@ -32,7 +32,8 @@ import config
 import datetime
 import os
 import sys
-import lang
+import hashlib
+import base64
 import log
 import traceback
 from cerberus import censor
@@ -63,14 +64,17 @@ class freqbot:
   self.access_modificators = []
   self.cmd_cache = {}
   self.want_restart = False
-  self.version_name = u'freqbot'
+  featlist = ['http://jabber.org/protocol/caps', 'http://jabber.org/protocol/muc', 'http://jabber.org/protocol/disco#info', 'urn:xmpp:ping', 'urn:xmpp:time', 'jabber:iq:version', 'vcard-temp']
+  self.features = sorted(featlist)
+  self.version_name = u'FreQ-bot'
   self.version_version = self.getVer()
   self.log.version = self.version_version
+  self.caps = self.genCaps()
   if config.SHARE_OS: 
    self.version_os = u'Twisted %s, Python %s' % (twisted.__version__, sys.version)
   else: self.version_os = 'SomeOS'
   self.authd = 0
-  self.wrapper = wrapper(self.version_version)
+  self.wrapper = wrapper(self.version_version, self.caps)
   self.wrapper.onauthd = self.onauthd
   self.wrapper.c.addBootstrap('//event/client/basicauth/authfailed', self.failed)
   self.wrapper.c.addBootstrap('//event/client/basicauth/invaliduser', self.failed)
@@ -315,7 +319,7 @@ class freqbot:
     answer['to'] = x.getAttribute('from')
     self.wrapper.send(answer)
   elif (xmlns == 'urn:xmpp:time') and (typ == 'get'):
-    answer = domish.Element((None, 'iq'))
+    answer = domish.Element(('jabber:client', 'iq'))
     answer['type'] = 'result'
     answer['id'] = x.getAttribute('id')
     answer['to'] = x.getAttribute('from')
@@ -325,6 +329,22 @@ class freqbot:
     if not tzo: tzo = '+0000'
     query.addElement('tzo').addContent(tzo[:3]+':'+tzo[3:])
     query.addElement('utc').addContent(t.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))
+    self.wrapper.send(answer)
+  elif (xmlns == 'http://jabber.org/protocol/disco#info') and (typ == 'get'):
+    answer = domish.Element(('jabber:client', 'iq'))
+    answer['type'] = 'result'
+    answer['id'] = x.getAttribute('id')
+    answer['to'] = x.getAttribute('from')
+    query = answer.addElement('query', 'http://jabber.org/protocol/disco#info')
+    identElem = domish.Element(('', 'identity'))
+    identElem['category'] = 'client'
+    identElem['type']     = 'bot'
+    identElem['name']     = self.version_name
+    query.addChild(identElem)
+    for i in self.features:
+      featElem = domish.Element(('', 'feature'))
+      featElem['var'] = i
+      query.addChild(featElem)
     self.wrapper.send(answer)
   elif (xmlns == 'jabber:iq:roster') and (typ == 'set'): pass
   elif typ == 'error': pass
@@ -340,6 +360,14 @@ class freqbot:
     cond = error.addElement('feature-not-implemented')
     cond['xmlns']='urn:ietf:params:xml:ns:xmpp-stanzas'
     self.wrapper.send(answer)
+
+ def genCaps(self):
+  identity = 'client/bot//%s %s<'%(self.version_name, self.version_version)
+  collector = ''
+  collector += identity
+  collector += '<'.join(self.features) + '<'
+  binary = hashlib.sha1(collector.encode('utf-8')).digest()
+  return base64.b64encode(binary).decode('utf-8')
 
  def getVer(self):
   try:

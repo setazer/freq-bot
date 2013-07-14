@@ -216,13 +216,18 @@ class muc:
   groupchat = self.bot.g.setdefault(groupchat, new_room(self.bot, groupchat))
   p = domish.Element(('jabber:client', 'presence'))
   p['to'] = u'%s/%s' % (groupchat.jid, nick)
-  p.addElement('status').addContent(options.get_option(groupchat.jid, 'status', \
+  p.addElement('status').addContent(options.get_option(groupchat.jid, 'status',
   config.STATUS).replace('%VERSION%', self.bot.version_version))
   p.addElement('show').addContent(options.get_option(groupchat.jid, 'show', config.SHOW))
   xElem = domish.Element(('http://jabber.org/protocol/muc', 'x'))
   if password != None:
    xElem.addElement('password').addContent(password)
   p.addChild(xElem)
+  cElem = domish.Element(('http://jabber.org/protocol/caps', 'c'))
+  cElem['hash'] = 'sha-1'
+  cElem['ver'] = self.bot.caps
+  cElem['node'] = 'http://www.freq-bot.net/'
+  p.addChild(cElem)
   self.bot.wrapper.send(p)
   q = self.load_groupchats()
   if not (groupchat.jid in q): self.dump_groupchats(q+[groupchat.jid])
