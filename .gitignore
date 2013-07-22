@@ -2,7 +2,7 @@
 .idea/
 chatlogs/
 freqbot.conf
-freq.pid
+*.pid
 log.html
 wisted.log
 err.html
