@@ -21,6 +21,8 @@
 def parse_alias(text):
  if text == u'&': return (2, None, None, text, False)
  if text == '': return (1, None, None, None, None)
+ if u'access_' in text:
+  return (1, None, None, None, None)
  if text.startswith(u'access:'):
   q = re.match(u'^access:(\d{1,3}):(\d{1,3})@(.*[^&])(&?)$', text)
   if q:
