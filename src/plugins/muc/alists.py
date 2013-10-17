@@ -89,8 +89,7 @@ class aitem:
   if self.by_jid: s = item.realjid.lower()
   else: s = item.nick
   if self.regexp:
-   return not(self.negative and (item.affiliation <> 'none')) and re.match(self.value, s)
-  #do not apply negative alists to level >= 3
+   return re.match(self.value, s)
   else: return (self.value == s)
  def get_reason(self):
   if self.reason: return self.reason
