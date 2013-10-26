@@ -187,3 +187,4 @@ wtfnames_empty база пуста
 wtfsearch_result совпадения найдены в: %s
 wtfsearch_error совпадений не найдено
 wtfsearch_not_parameters а что искать то?
+wtf_error Ошибка %s
