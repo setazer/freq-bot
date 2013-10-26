@@ -37,7 +37,7 @@ class Wtf:
             d.callback(0)
         except:
 			error = sys.exc_info()[0]
-            d.errback(error)
+			d.errback(error)
         
     def _wtf_find(self, room, s, d):
         res = self.db.query('select wtf_id from wtf where room=? and wtf_id like ?',
@@ -52,7 +52,8 @@ class Wtf:
             d.callback(self.db.query('select count(*) from wtf where room=?',
                 (room,)).fetchone()[0])
         except:
-            d.errback(0)
+            error = sys.exc_info()[0]
+            d.errback(error)
             
     def _wtf_words(self, room, d):
         try:
@@ -64,7 +65,7 @@ class Wtf:
                 d.callback(0)
         except:
 			error = sys.exc_info()[0]
-            d.errback(error)
+			d.errback(error)
 
     def wtf(self, room, wtf_id):
         d = D()
