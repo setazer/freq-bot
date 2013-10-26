@@ -5,6 +5,7 @@ alias_empty alias list is empty
 alias_no_access not allowed
 alias_not_allowed not allowed
 alias_not_found alias not found
+alias_security possible security hole in alias
 alias_saved saved
 alias_saved_with_access alias saved (required level: %s, alias grants: %s)
 censor censor from %s\nnick: %s(%s)\ncensor: %s\n%s 
@@ -99,6 +100,7 @@ version_result_self %s %s %s
 version_result_your you use %s %s %s
 whom? who?
 update_info my revision: %s available revision: %s
+wtf_error error in wtf plugin
 wtf_empty What to look?
 wtf_not_found Has found nothing
 dfn_empty What to write?
@@ -112,3 +114,9 @@ wtfnames_empty The database is empty
 wtfsearch_result Coincidences are found in: %s
 wtfsearch_error not found
 wtfsearch_not_parameters what to search?
+member member
+participant participant
+admin admin
+moderator moderator
+owner owner
+visitor visitor

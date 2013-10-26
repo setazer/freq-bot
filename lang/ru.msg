@@ -11,6 +11,7 @@ alias_empty нет ни одного алиаса
 alias_no_access у вас недостаточно прав, чтобы поставить такой высокий уровень выполнения алиаса
 alias_not_allowed у вас недостаточно прав для выполнения этого алиаса
 alias_not_found нет такого алиаса
+alias_security возможно, этот алиас небезопасен
 alias_saved_with_access алиас сохранён (уровень доступа к алиасу: %s, алиас будет выполняться с уровнем доступа %s)
 alias_saved сохранил
 alist_add_nojid не вижу его jid..
@@ -175,6 +176,7 @@ www_error_reason ошибка при загрузке страницы: %s
 www_error ошибка при загрузке страницы
 www_timeout_error сервер не отвечает (таймаут)
 update_info моя ревизия: %s доступная svn ревизия: %s
+wtf_error ошибка модуля wtf
 wtf_empty что смотреть то?
 wtf_not_found ничего не нашёл
 dfn_empty что записать то?
@@ -187,3 +189,9 @@ wtfnames_empty база пуста
 wtfsearch_result совпадения найдены в: %s
 wtfsearch_error совпадений не найдено
 wtfsearch_not_parameters а что искать то?
+member член
+participant участник
+admin админ
+moderator модератор
+owner владелец
+visitor безголосый
