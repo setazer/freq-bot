@@ -176,7 +176,6 @@ www_error_reason ошибка при загрузке страницы: %s
 www_error ошибка при загрузке страницы
 www_timeout_error сервер не отвечает (таймаут)
 update_info моя ревизия: %s доступная svn ревизия: %s
-wtf_error ошибка модуля wtf
 wtf_empty что смотреть то?
 wtf_not_found ничего не нашёл
 dfn_empty что записать то?
@@ -189,6 +188,7 @@ wtfnames_empty база пуста
 wtfsearch_result совпадения найдены в: %s
 wtfsearch_error совпадений не найдено
 wtfsearch_not_parameters а что искать то?
+wtf_error Ошибка %s
 member член
 participant участник
 admin админ

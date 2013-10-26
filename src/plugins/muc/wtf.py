@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 # __NEED_DB__
+import sys
 
 class Wtf:
     def __init__(self, bot):
@@ -8,7 +9,7 @@ class Wtf:
         self.bot = bot
         q = self.db.query('select count(*) from SQLITE_MASTER where type="table" and tbl_name="wtf"')
         if q.fetchone()[0] == 0:
-            self.bot.log.log('Create table for nickstorage')
+            self.bot.log.log('Create table for wtf')
             self.db.query('create table wtf(room text, wtf_id text, wtf_val text)')
             self.db.commit()
 
@@ -35,7 +36,8 @@ class Wtf:
             self.db.commit()
             d.callback(0)
         except:
-            d.errback(0)
+			error = sys.exc_info()[0]
+            d.errback(error)
         
     def _wtf_find(self, room, s, d):
         res = self.db.query('select wtf_id from wtf where room=? and wtf_id like ?',
@@ -61,7 +63,8 @@ class Wtf:
             else:
                 d.callback(0)
         except:
-            d.errback(0)
+			error = sys.exc_info()[0]
+            d.errback(error)
 
     def wtf(self, room, wtf_id):
         d = D()
@@ -135,7 +138,7 @@ def wtf_result(r, t, s):
         s.lmsg(t, 'not_found')
 
 def wtf_error(err, t, s):
-    s.lmsg(t, 'wtf_error')
+    s.lmsg(t, 'Error %s'%(err, ))
 
 def wtf_find_result(r, t, s):
     if r:
