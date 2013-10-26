@@ -31,7 +31,7 @@ def twitter_handler(t, s, p):
         count = '10'
     result=''
     try:
-        data=json.load(urllib.urlopen('https://api.twitter.com/1/statuses/user_timeline.json?include_rts=true&trim_user=true&screen_name=%s&count=%s'%(inl[0], count)))
+        data=json.load(urllib.urlopen('https://api.twitter.com/1.1/statuses/user_timeline.json?include_rts=true&trim_user=true&screen_name=%s&count=%s'%(inl[0], count)))
         if not data:
             result=u'Закрытый Twitter'
         elif type(data) is list:
