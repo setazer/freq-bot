@@ -32,10 +32,10 @@ class logger:
 
  def _log(self, fn, m, h):
   if not os.access(fn, 0):
-   fp = file(fn, 'w')
+   fp = open(fn, 'w')
    fp.write(h.encode('utf8', 'replace'))
    fp.close()
-  fp = file(fn, 'a')
+  fp = open(fn, 'a')
   fp.write(m.replace(r'$PID$', self.pid).replace('$VERSION$', \
   self.version).encode('utf8', 'replace'))
   fp.close()

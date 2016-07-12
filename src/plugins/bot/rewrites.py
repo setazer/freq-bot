@@ -82,7 +82,7 @@ def redirect_handler(q):
   if source.room and (nick in source.room.keys()):
    return [('redirect:' + nick, source,text, stanza)]
   else:
-   print (nick, source.room.keys())
+   print(nick, source.room.keys())
    return [(typ, source, '.echo ' + source.get_msg('redirect_nowhere'), stanza)]
 
 def mynick_handler(q):

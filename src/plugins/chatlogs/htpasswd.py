@@ -32,7 +32,7 @@ def chatlogs_passwd_handler(t, s, p):
   else:
    p = p.split()
    if len(p) == 2:
-    f = file(PATH + '.htaccess', 'w')
+    f = open(PATH + '.htaccess', 'w')
     f.write('AuthType Basic\nAuthName "Ask room owner for the username/password"\n' + \
     'AuthUserFile %s.htpasswd\nrequire valid-user' % (PATH, ))
     f.close()

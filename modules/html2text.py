@@ -440,14 +440,14 @@ def wrapwrite(text):
     except AttributeError:
         sys.stdout.write(text)
 
-def html2text_file(html, out=wrapwrite, baseurl=''):
+def html2text_open(html, out=wrapwrite, baseurl=''):
     h = _html2text(out, baseurl)
     h.feed(html)
     h.feed("")
     return h.close()
 
 def html2text(html, baseurl=''):
-    return optwrap(html2text_file(html, None, baseurl))
+    return optwrap(html2text_open(html, None, baseurl))
 
 if __name__ == "__main__":
     baseurl = ''

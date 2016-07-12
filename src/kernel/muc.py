@@ -82,7 +82,7 @@ class muc:
 
  def invalid_syntax(self, t, s, text):
   try:
-   s.lmsg(t, 'invalid_syntax', self.bot.read_file('doc/syntax/%s.txt' % (text, )).strip())
+   s.lmsg(t, 'invalid_syntax', self.bot.read_open('doc/syntax/%s.txt' % (text, )).strip())
   except: s.lmsg(t, 'invalid_syntax_default')
 
  def presence_handler(self, x):
@@ -254,13 +254,13 @@ class muc:
 
  def load_groupchats(self):
   try:
-   f = file(self.g_file, 'r')
+   f = open(self.g_file, 'r')
    g = f.read().decode('utf8').split(u'\n')
    f.close()
   except: g = []
   return [i.strip() for i in g if i]
 
  def dump_groupchats(self, groupchats):
-  f = file(self.g_file, 'w')
+  f = open(self.g_file, 'w')
   f.write(u'\n'.join(groupchats).encode('utf8'))
   f.close()

@@ -27,7 +27,7 @@ LANG = {}
 
 ll = [i for i in os.listdir('lang') if i.endswith(lang_ext)]
 for i in ll:
- fp = file('lang/'+i, 'r')
+ fp = open('lang/'+i, 'r')
  p = fp.read().decode('utf8').split('\n')
  p = [j.strip() for j in p if j.count(' ')]
  fp.close()
@@ -70,7 +70,7 @@ def dump(l, f):
  x.sort()
  for i in x:
   s += u'%s %s\n' % (i, q[i].replace('\n', '\\n'))
- fp = file(f, 'w')
+ fp = open(f, 'w')
  fp.write(s.encode('utf8'))
  fp.close()
 

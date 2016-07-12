@@ -19,7 +19,7 @@
 #~ along with FreQ-bot.  If not, see <http://www.gnu.org/licenses/>.    #
 #~#######################################################################
 
-TLDS = file('static/tlds.txt').read().decode('utf8', 'replace').splitlines()
+TLDS = open('static/tlds.txt').read().decode('utf8', 'replace').splitlines()
 TLDS.sort()
 TLDS = [line.strip().split(':') for line in TLDS if line.count(':')]
 TLDS = [(tld[0].lower(), tld[1].lower()) for tld in TLDS]
@@ -45,7 +45,7 @@ bot.register_cmd_handler(tld_handler, '.tld')
 def parse_area(s):
  return re.match(r'^(..)\ (.+)$', s).groups()
 
-AREAS = file('static/arearu.txt').read().decode('utf8', 'replace').splitlines()
+AREAS = open('static/arearu.txt').read().decode('utf8', 'replace').splitlines()
 AREAS.sort()
 AREAS = [parse_area(line) for line in AREAS if line.count(' ')]
 

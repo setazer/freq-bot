@@ -35,7 +35,7 @@ if not wd: wd = '.'
 os.chdir(wd)
 sys.path.insert(0, 'src/kernel')
 sys.path.insert(0, 'modules')
-#print 'sys.path is %s' % (sys.path, )
+#print('sys.path is %s' % (sys.path, ))
 
 import config
 
@@ -57,7 +57,7 @@ tm = int(time.time()) + config.RESTART_INTERVAL
 pid = str(os.getpid())
 
 try:
- fp = file(config.PIDFILE, 'r')
+ fp = open(config.PIDFILE, 'r')
  p = fp.read()
  fp.close()
  if p <> pid:
@@ -68,7 +68,7 @@ try:
   sys.stdout.write('pid %s killed.. ' % (p, ))
 except: pass
 
-fp = file(config.PIDFILE, 'w')
+fp = open(config.PIDFILE, 'w')
 fp.write(pid)
 fp.close()
 
@@ -89,7 +89,7 @@ try:
  bot.plug.load_all()
  reactor.run()
 except:
- bot.log.err(escape('FATAL ERROR: %s' % (traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback), )))
+ bot.log.err(escape('FATAL ERROR: %s' % (traceback.format_exc(), )))
 
 def log(m, e=False):
  bot.log.log(m)

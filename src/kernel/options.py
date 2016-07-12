@@ -47,17 +47,17 @@ def check_directory(groupchat):
  if not os.access(prefix, os.W_OK): os.mkdir(prefix)
  if not os.access(d, os.W_OK): os.mkdir(d)
 
-def read_file(groupchat, f):
+def read_open(groupchat, f):
  fn = '%s/text/groupchats/%s/%s.txt' % (DATADIR, groupchat.encode('utf8'), f)
- fp = file(fn, 'r')
+ fp = open(fn, 'r')
  r = fp.read()
  fp.close()
  return r.decode(enc)
 
-def write_file(groupchat, f, text):
+def write_open(groupchat, f, text):
  check_directory(groupchat)
  fn = '%s/text/groupchats/%s/%s.txt' % (DATADIR, groupchat.encode('utf8'), f)
- fp = file(fn, 'w')
+ fp = open(fn, 'w')
  fp.write(text.encode(enc))
  fp.close()
 
@@ -69,13 +69,13 @@ class optstringlist:
 
  def __getitem__(self, groupchat):
   if not(groupchat in self.values.keys()):
-   try: x = read_file(groupchat, self.fname).split('\n')
+   try: x = read_open(groupchat, self.fname).split('\n')
    except: x = []
    self.values[groupchat] = [unquote(i.strip().encode(enc)).decode(enc) for i in x if i.strip()]
   return self.values[groupchat]
 
  def __setitem__(self, groupchat, values):
-  write_file(groupchat, self.fname, u'\n'.join([quote(i.encode(enc)).decode(enc) for i in values]))
+  write_open(groupchat, self.fname, u'\n'.join([quote(i.encode(enc)).decode(enc) for i in values]))
   self.values[groupchat] = values
   #print [quote(i) for i in values]
   #print values

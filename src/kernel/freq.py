@@ -45,7 +45,7 @@ class freqbot:
   self.env = env
   self.log = log.logger()
   if not os.access(config.LOGF, 0):
-   fp = file(config.LOGF, 'w')
+   fp = open(config.LOGF, 'w')
    fp.write('# freQ log\n')
    fp.close()
   twisted.python.log.startLogging(open(config.LOGF, 'a'))
@@ -157,10 +157,11 @@ class freqbot:
     #reactor.stop()
    else:
     self.log.log(escape(repr(m)), 4)
-  except: print m 
+  except:
+   print(m)
 
  def failed(self, x):
-  print 'connect failed!'
+  print('connect failed!')
   self.log.err('cannot login to jabber account (eg invalid username/password ) :(')
   reactor.stop()
 
@@ -245,7 +246,7 @@ class freqbot:
          self.log.log(u'Calling command handler %s for command <font color=red>%s</font> from <font color=blue>%s </font><br/><font color=grey>%s</font>' % (escape(repr(i[0])), escape(b), escape(s.jid), escape(stanza.toXml())), 4)
          try: i[0](t, s, params)
          except: 
-          m = ''.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback))
+          m = ''.join(traceback.format_exc())
           self.log.err(escape(m))
           item.lmsg(t, 'ERROR', config.ERRLOGFILE)
         else: s.lmsg(t, 'muc_only')
@@ -287,8 +288,8 @@ class freqbot:
   #      2: ban
   #      3: rename
 
- def read_file(self, fn):
-  f = file(fn, 'r')
+ def read_open(self, fn):
+  f = open(fn, 'r')
   content = f.read().decode('utf8')
   r = f.close()
   return content
@@ -371,13 +372,13 @@ class freqbot:
 
  def getVer(self):
   try:
-   f = file('VERSION.guess', 'r')
+   f = open('VERSION.guess', 'r')
    r = f.read()
    f.close()
    return r
   except:
    try:
-    f = file('VERSION', 'r')
+    f = open('VERSION', 'r')
     r = f.read()
     f.close()
     return r
@@ -387,7 +388,7 @@ class freqbot:
  def call(self, f, *args, **kwargs):
   try: return f(*args, **kwargs)
   except:
-   m = '; '.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback))
+   m = '; '.join(traceback.format_exc())
    m = m.decode('utf8', 'replace')
    m = u'<font color=red><b>ERROR:</b></font> %s\n<br/>\n(f, *args, *kwargs) was <font color=grey>(%s)</font>' \
          % (escape(m), escape(repr((f, args, kwargs))))

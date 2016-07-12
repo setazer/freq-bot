@@ -33,7 +33,7 @@ def initialize_help():
    HELP_LANGS.setdefault(p, [])
    HELP_LANGS[p].append(language)
    fn = 'doc/help/%s' % (i, )
-   fp = file(fn, 'r')
+   fp = open(fn, 'r')
    c = fp.readline().decode('utf8')
    fp.close()
    for j in c.split():

@@ -25,7 +25,7 @@
 from twisted.web.html import escape
 from twisted.words.protocols.jabber import jid
 
-def read_file(f):
+def read_open(f):
  q = open(f, 'r')
  s = q.read().decode('utf8', 'replace')
  q.close()
@@ -33,8 +33,8 @@ def read_file(f):
 
 LOG_FILES = {}
 TOPICS = {}
-log_header = read_file('templates/chatlog_header.html')
-log_footer = read_file('templates/chatlog_footer.html')
+log_header = read_open('templates/chatlog_header.html')
+log_footer = read_open('templates/chatlog_footer.html')
 next = ''
 prev = ''
 
@@ -63,7 +63,7 @@ def write_to_log_(groupchat, text, with_timestamp=True, with_br=True):
   check_dir(p1)
   check_dir(p2)
   check_dir(p3)
-  fp = file(p4, 'w')
+  fp = open(p4, 'w')
   user, server = groupchat.split(u'@')
   header = log_header.replace('$user', user).replace('$server', server).replace('$year', time.strftime('%Y'))
   header = header.replace('$month', time.strftime('%m')).replace('$day', time.strftime('%d'))
@@ -82,7 +82,7 @@ def write_to_log_(groupchat, text, with_timestamp=True, with_br=True):
  else: tm = u''
  text = u'%s %s' % (tm, text)
  if with_br: text = text + u'<br/>'
- fp = file(p4, 'a')
+ fp = open(p4, 'a')
  fp.write(text.encode('utf8', 'replace'))
  fp.close()
 
@@ -91,7 +91,7 @@ def close_log(fn):
  global prev
  if os.access(fn, os.W_OK):
   footer = log_footer.replace('$next', next).replace('$prev', prev)
-  fp = file(fn, 'a')
+  fp = open(fn, 'a')
   fp.write(footer.encode('utf8', 'replace'))
   fp.close()
 
@@ -199,4 +199,4 @@ if os.access(config.CHATLOGS_DIR, os.W_OK) == 0:
  os.mkdir(config.CHATLOGS_DIR+'/images')
  from shutil import copyfile
  for img in ['powered-by-freq.png', 'powered-by-python.png', 'valid-css.gif', 'valid-xhtml.png']:
-  copyfile('static/'+img, config.CHATLOGS_DIR+'/images/'+img)
+  copyopen('static/'+img, config.CHATLOGS_DIR+'/images/'+img)

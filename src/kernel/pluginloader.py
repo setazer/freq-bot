@@ -35,19 +35,19 @@ class pluginloader:
   sys.stdout.write('Loading plugins: ')
   for i in self.pluginlist:
    self.load(i)
-  print ' done.'
- 
+  print(' done.')
+
  def load(self, p):
   tl = os.listdir(PLUGINS_DIR+'/'+p)
   tl = [i for i in tl if i.endswith('.py')]
   for i in tl:
    fn = '%s/%s/%s' % (PLUGINS_DIR, p, i);
-   fp = file(fn, 'r')
+   fp = open(fn, 'r')
    pc = fp.read()
    fp.close()
    if config.ENABLE_SQLITE or not pc.count('__NEED_DB__'):
     try:
-     exec pc in self.env
+     exec(pc, self.env)
     except:
      sys.stderr.write('\nCan\'t load plugin %s:\n' % (fn, ))
      raise

@@ -1,4 +1,4 @@
-r"""JSON (JavaScript Object Notation) <http://json.org> is a subset of
+"""JSON (JavaScript Object Notation) <http://json.org> is a subset of
 JavaScript syntax (ECMA-262 3rd edition) used as a lightweight data
 interchange format.
 
@@ -10,7 +10,6 @@ significant performance advantages, even without using the optional C
 extension for speedups.
 
 Encoding basic Python object hierarchies::
-
     >>> import simplejson as json
     >>> json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])
     '["foo", {"bar": ["baz", null, 1.0, 2]}]'

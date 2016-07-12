@@ -290,7 +290,7 @@ class wrapper:
   except:
    try: xml = x.toXml()
    except: xml = '[can\'t x.toXml()]'
-   m = '; '.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback))
+   m = '; '.join(traceback.format_exc())
    m = m.decode('utf8', 'replace')
    self.log.err_e('Can\'t send stanza! (xml: %s). Error: %s' % (xml, m))
 
@@ -315,14 +315,14 @@ class wrapper:
    self.log.log(escape('=== started thread #%s' % (tc, )), 1)
    try: f(*args, **kwargs)
    except:
-    m = '; '.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback))
+    m = '; '.join(traceback.format_exc())
     m = m.decode('utf8', 'replace')
     m = u'<font color=red><b>UNCATCHED ERROR:</b></font> %s\n<br/>\n(f, *args, *kwargs, thread) was <font color=grey>(%s)</font>' \
          % (escape(m), escape(repr((f, args, kwargs, tc))))
     self.log.err(m)
    self.log.log(escape('=== finished thread #%s' % (tc, )), 1)
   except:
-   m = ''.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback))
-   print 'STOP: ', m
+   m = ''.join(traceback.format_exc())
+   print('STOP: ', m)
    self.log.err(escape(m))
    self.log.err('=== failed thread #%s' % (self.tc, ))
