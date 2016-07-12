@@ -24,7 +24,8 @@ defaults = './config.defaults'
 
 def parse(conf):
  cfg = open(conf, 'r').read()
- exec cfg in globals()
+ exec(cfg, globals())
+
 
 def init(conf):
  try: parse(defaults)

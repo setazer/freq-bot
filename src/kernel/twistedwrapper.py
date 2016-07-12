@@ -33,6 +33,8 @@ import sys
 import config
 import time
 
+class ParserError(Exception): pass
+
 class NonStrictExpatElementStream:
     """
     Based on twisted.words.xish.domish.ExpatElementStream, but parses
@@ -60,8 +62,8 @@ class NonStrictExpatElementStream:
     def parse(self, buffer):
         try:
             self.parser.Parse(buffer)
-        except self.error, e:
-            raise ParserError, str(e)
+        except self.error as e:
+            raise ParserError(str(e))
     
     def getUriByPrefix(self, q):
       prefix = q[0]
@@ -74,7 +76,7 @@ class NonStrictExpatElementStream:
       if uri is None:
         if prefix.lower().startswith('xml'):
           uri = self.reserverPrefixes.get(prefix, self.defaultNsStack[-1])
-        elif self.strict: raise ParserError, 'Unbound prefix: ' + prefix
+        elif self.strict: raise ParserError('Unbound prefix: ' + prefix)
         else: uri = self.defaultNsStack[-1]
       return (uri, nname)
 

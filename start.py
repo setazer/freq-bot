@@ -41,7 +41,7 @@ import config
 
 if len(sys.argv) > 1: cfg = sys.argv[1]
 else: cfg = './freqbot.conf'
-print 'Using %s as config file' % (cfg, )
+print('Using %s as config file' % (cfg,))
 config.init(cfg)
 
  
